@@ -69,8 +69,6 @@ module Oga
       # @param [Hash] mapping
       # @return [String]
       def self.decode(input, mapping = DECODE_MAPPING)
-        return input unless input.include?(AMPERSAND)
-
         input = input.gsub(REGULAR_ENTITY, mapping)
 
         if input.include?(AMPERSAND)

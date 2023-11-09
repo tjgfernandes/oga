@@ -7,6 +7,7 @@ module Oga
         super
 
         @decoded = false
+        @mqxliff_mode ||= true
       end
 
       # @param [String] value
@@ -30,9 +31,9 @@ module Oga
 
       # @return [TrueClass|FalseClass]
       def decode_entities?
-        !@decoded && !inside_literal_html?
+        !@decoded && !inside_literal_html? && !@mqxliff_mode
       end
-
+      
       # @return [TrueClass|FalseClass]
       def inside_literal_html?
         node = parent

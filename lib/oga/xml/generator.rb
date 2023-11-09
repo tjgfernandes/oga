@@ -13,6 +13,8 @@ module Oga
     #
     # @private
     class Generator
+      BOM = [239, 187, 191].freeze
+
       # @param [Oga::XML::Document|Oga::XML::Node] root The node to serialise.
       def initialize(root)
         @start = root
@@ -22,6 +24,8 @@ module Oga
         else
           @html_mode = false
         end
+
+        @mqxliff_mode ||= true
       end
 
       # Returns the XML for the current root node.
@@ -99,8 +103,10 @@ module Oga
       # @param [Oga::XML::Text] node
       # @param [String] output
       def on_text(node, output)
-        if @html_mode && (parent = node.parent) && parent.literal_html_name?
-          output << node.text
+        return if @mqxliff_mode && node.text.bytes == BOM
+
+        if (@html_mode && (parent = node.parent) && parent.literal_html_name?) or @mqxliff_mode
+          output << node.text.force_encoding('UTF-8')
         else
           output << Entities.encode(node.text)
         end
@@ -138,7 +144,7 @@ module Oga
         if self_closing?(element)
           closing_tag = html_void_element?(element) ? '>' : ' />'
 
-          output << "<#{name}#{attrs}#{closing_tag}"
+          output << "<#{name}#{attrs}#{closing_tag}".force_encoding('UTF-8')
         else
           output << "<#{name}#{attrs}>"
         end
@@ -154,7 +160,11 @@ module Oga
       # @param [String] output
       def on_attribute(attr, output)
         name = attr.expanded_name
-        enc_value = attr.value ? Entities.encode_attribute(attr.value) : nil
+        enc_value = if @mqxliff_mode
+                      attr.value
+                    elsif attr.value 
+                      Entities.encode_attribute(attr.value)
+                    end
 
         output << %Q(#{name}="#{enc_value}")
       end
@@ -176,12 +186,12 @@ module Oga
       def on_document(doc, output)
         if doc.xml_declaration
           on_xml_declaration(doc.xml_declaration, output)
-          output << "\n"
+          output << "\n" unless @mqxliff_mode
         end
 
         if doc.doctype
           on_doctype(doc.doctype, output)
-          output << "\n"
+          output << "\n" unless @mqxliff_mode
         end
 
         first_child = doc.children[0]
@@ -204,7 +214,7 @@ module Oga
           output << %Q{ #{getter}="#{value}"} if value
         end
 
-        output << ' ?>'
+        output << '?>'
       end
 
       # @param [Oga::XML::Element] element
