@@ -100,6 +100,13 @@ module Oga
         output
       end
 
+      # Returns the XML of children from current root node.
+      #
+      # @return [String]
+      def children_to_xml
+        @start.children.map(&:to_xml).join("")
+      end
+
       # @param [Oga::XML::Text] node
       # @param [String] output
       def on_text(node, output)
