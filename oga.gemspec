@@ -33,12 +33,12 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'ast'
   s.add_dependency 'ruby-ll', '~> 2.1'
+  s.add_dependency 'rake-compiler'
 
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake', ['~> 13.0.6']
   s.add_development_dependency 'rspec', ['~> 3.0']
   s.add_development_dependency 'yard'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'kramdown'
   s.add_development_dependency 'benchmark-ips', ['~> 2.0']
-  s.add_development_dependency 'rake-compiler'
 end
