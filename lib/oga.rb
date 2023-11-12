@@ -1,7 +1,7 @@
-require_relative 'ast'
-require_relative 'set'
-require_relative 'stringio'
-require_relative 'thread'
+require 'ast'
+require 'set'
+require 'stringio'
+require 'thread'
 
 require_relative 'oga/version'
 require_relative 'oga/oga'
@@ -15,11 +15,11 @@ require_relative 'oga/whitelist'
 require_relative 'oga/xml/lexer'
 require_relative 'oga/xml/parser'
 
-require_relative 'liboga'
+require 'liboga'
 
 #:nocov:
 if RUBY_PLATFORM == 'java'
-  require_relative 'jruby'
+  require 'jruby'
 
   org.liboga.Liboga.load(JRuby.runtime)
 end
