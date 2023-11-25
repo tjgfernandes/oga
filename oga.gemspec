@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.3.0'
 
+  s.require_paths = ['lib', 'ext/c']
+
   s.add_dependency 'ast'
   s.add_dependency 'ruby-ll', '~> 2.1'
   s.add_dependency 'rake-compiler'
