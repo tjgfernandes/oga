@@ -37,7 +37,7 @@ module Oga
         @name           = options[:name]
         @value          = options[:value]
         @element        = options[:element]
-        @decoded        = false
+        @decoded        = true
         @namespace      = nil
         @namespace_name = options[:namespace_name]
       end
@@ -61,17 +61,17 @@ module Oga
       # @param [String] value
       def value=(value)
         @value   = value
-        @decoded = false
+        # @decoded = false
       end
 
       # Returns the value of the attribute or nil if no explicit value was set.
       #
       # @return [String|NilClass]
       def value
-        if !@decoded and @value
-          @value   = EntityDecoder.try_decode(@value, html?)
-          @decoded = true
-        end
+        # if !@decoded and @value
+        #   @value   = EntityDecoder.try_decode(@value, html?)
+        #   @decoded = true
+        # end
 
         @value
       end
