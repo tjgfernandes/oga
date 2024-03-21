@@ -112,17 +112,19 @@ module Oga
       def on_text(node, output)
         return if @mqxliff_mode && node.text.bytes == BOM
 
-        if (@html_mode && (parent = node.parent) && parent.literal_html_name?) or @mqxliff_mode
-          output << node.text.force_encoding('UTF-8')
-        else
-          output << Entities.encode(node.text)
-        end
+        te = if (@html_mode && (parent = node.parent) && parent.literal_html_name?) or @mqxliff_mode
+               node.text
+             else
+               Entities.encode(node.text)
+             end
+
+        output << te.force_encoding('UTF-8')
       end
 
       # @param [Oga::XML::Cdata] node
       # @param [String] output
       def on_cdata(node, output)
-        output << "<![CDATA[#{node.text}]]>"
+        output << "<![CDATA[#{node.text}]]>".force_encoding('UTF-8')
       end
 
       # @param [Oga::XML::Comment] node
