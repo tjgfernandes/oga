@@ -148,13 +148,15 @@ module Oga
           on_attribute(attr, attrs)
         end
 
-        if self_closing?(element)
-          closing_tag = html_void_element?(element) ? '>' : ' />'
+        es = if self_closing?(element)
+             closing_tag = html_void_element?(element) ? '>' : ' />'
 
-          output << "<#{name}#{attrs}#{closing_tag}".force_encoding('UTF-8')
-        else
-          output << "<#{name}#{attrs}>"
-        end
+               "<#{name}#{attrs}#{closing_tag}"
+             else
+               "<#{name}#{attrs}>"
+             end
+
+        output << es.force_encoding('UTF-8')
       end
 
       # @param [Oga::XML::Element] element
